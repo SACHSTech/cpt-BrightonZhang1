@@ -13,7 +13,7 @@ import java.util.Set;
 public class DataExtract {
     public static String comma = ",";
     ArrayList<String> yearList = new ArrayList<String>();
-    HashMap<String, ArrayList<countryEnergy>> countryEnergy = new HashMap<String, ArrayList<countryEnergy>>();
+    HashMap<String, ArrayList<Energy>> countryEnergy = new HashMap<String, ArrayList<Energy>>();
 
     public ArrayList<String> getYearList() {
         return yearList;
@@ -23,22 +23,20 @@ public class DataExtract {
         this.yearList = yearSet;
     }
 
-    public HashMap<String, ArrayList<countryEnergy>> getcountryEnergy() {
+    public HashMap<String, ArrayList<Energy>> getcountryEnergy() {
         return countryEnergy;
     }
 
-    public void setcountryEnergy(HashMap<String, ArrayList<countryEnergy>> countryEnergy) {
+    public void setcountryEnergy(HashMap<String, ArrayList<Energy>> countryEnergy) {
         this.countryEnergy = countryEnergy;
     }
 
     public ArrayList<String> getUniqueCountries() {
         Set<String> countrySet = countryEnergy.keySet();
         ArrayList<String> countryList = new ArrayList<String>(countrySet);
-        // use merge sort
-        Collections.sort(countryList);
         return countryList;
     }
-
+ 
     public void csvConvert() throws IOException {
         Set<String> yearSet = new HashSet<String>();
         String country = "";
@@ -47,24 +45,26 @@ public class DataExtract {
         FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
         String line = " ";
-        String[] tempArr;
+        String[] tempArray;
+        
         while ((line = br.readLine()) != null) {
             if (fileColCounter == 0) {
                 fileColCounter++;
                 continue;
             }
-            tempArr = line.split(comma);
-            country = tempArr[0];
 
-            ArrayList<countryEnergy> things = countryEnergy.get(country);
+            tempArray = line.split(comma);
+            country = tempArray[0];
+
+            ArrayList<Energy> things = countryEnergy.get(country);
             if (things == null) {
-                things = new ArrayList<countryEnergy>();
+                things = new ArrayList<Energy>();
             }
 
-            things.add(new countryEnergy(country, tempArr[1], Double.parseDouble(tempArr[2])));
+            things.add(new Energy(country, tempArray[1], Double.parseDouble(tempArray[2])));
             countryEnergy.put(country, things);
 
-            yearSet.add(tempArr[2]);
+            yearSet.add(tempArray[2]);
         }
         br.close();
         yearList = new ArrayList<String>(yearSet);
