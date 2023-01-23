@@ -130,7 +130,9 @@ public class BarOne extends Application {
                     d.setYValue(d.getYValue().doubleValue() * 3600000);
                 }
             }
-        } else {
+        } 
+        
+        else {
             yAxis.setUpperBound(originalUpperBound);
             yAxis.setLowerBound(originalLowerBound);
             yAxis.setLabel("kWh / Person");
@@ -153,10 +155,9 @@ public class BarOne extends Application {
 
     countryChoice.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> ov, String oldVal, String newVal) -> {
         ArrayList<BarChart.Data> data = new ArrayList<BarChart.Data>();
-
+        joulesCheckbox.setSelected(false);
         // Clear the chart's data
         chart.getData().clear();
-
         if (newVal.equals("All countries")) {
             // Add all the country data to the chart
             for (Map.Entry<String, ArrayList<Energy>> set : countryEnergy.entrySet()) {
@@ -169,7 +170,9 @@ public class BarOne extends Application {
                 chart.getData().add(new BarChart.Series(country, FXCollections.observableArrayList(data)));
                 data.clear();
             }
-        } else {
+        } 
+        
+        else {
             // Get the energy data for the selected country
             ArrayList<Energy> items = countryEnergy.get(newVal);
 
