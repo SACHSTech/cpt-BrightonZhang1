@@ -2,10 +2,10 @@ package application;
 
 public class countryEnergy {
     private String strCountry;
-    private int intYear;
+    private String intYear;
     private double dblkWh;
 
-    public countryEnergy(String country, int year, double kWh){
+    public countryEnergy(String country, String year, double kWh){
         strCountry = country;
         intYear = year;
         dblkWh = kWh;
@@ -19,11 +19,11 @@ public class countryEnergy {
         this.strCountry = strCountry;
     }
 
-    public int getIntYear() {
+    public String getIntYear() {
         return intYear;
     }
 
-    public void setIntYear(int intYear) {
+    public void setIntYear(String intYear) {
         this.intYear = intYear;
     }
 
