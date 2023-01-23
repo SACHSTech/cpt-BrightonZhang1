@@ -67,7 +67,7 @@ public class DataExtract {
             things.add(new Energy(country, tempArray[1], Double.parseDouble(tempArray[2])));
             countryEnergy.put(country, things);
 
-            yearSet.add(tempArray[2]);
+            yearSet.add(tempArray[1]);
         }
         br.close();
         yearList = new ArrayList<String>(yearSet);

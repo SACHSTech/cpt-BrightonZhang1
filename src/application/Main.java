@@ -10,8 +10,9 @@ public class Main {
         ArrayList <String> countries = new ArrayList<>();
         countries = e.getUniqueCountries();
 
-        for(int i = 0; i < 10; i++){
-        System.out.println(countries.get(i));
-        }
+        System.out.println(e.getYearList());
+        // for(int i = 0; i < 10; i++){
+        // System.out.println(countries.get(i));
+        // }
     }
 }

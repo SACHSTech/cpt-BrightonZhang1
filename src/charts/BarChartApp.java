@@ -24,8 +24,6 @@ public class BarChartApp extends Application {
     private NumberAxis yAxis;
  
     public Parent createContent() {
-        DataExtract e = new DataExtract();
-
         String[] years = {"2007", "2008", "2009", "2010"};
         xAxis = new CategoryAxis();
         xAxis.setCategories(FXCollections.<String>observableArrayList(years));
