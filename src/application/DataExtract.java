@@ -11,9 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class DataExtract {
-    public static final String delimiter = ",";
+    public static final String comma = ",";
     ArrayList<String> yearList = new ArrayList<String>();
-    HashMap<String, ArrayList<countryEnergy>> countrySpaceItems = new HashMap<String, ArrayList<countryEnergy>>();
+    HashMap<String, ArrayList<countryEnergy>> countryEnergy = new HashMap<String, ArrayList<countryEnergy>>();
 
     public ArrayList<String> getYearList() {
         return yearList;
@@ -23,16 +23,16 @@ public class DataExtract {
         this.yearList = yearSet;
     }
 
-    public HashMap<String, ArrayList<countryEnergy>> getCountrySpaceItems() {
-        return countrySpaceItems;
+    public HashMap<String, ArrayList<countryEnergy>> getcountryEnergy() {
+        return countryEnergy;
     }
 
-    public void setCountrySpaceItems(HashMap<String, ArrayList<countryEnergy>> countrySpaceItems) {
-        this.countrySpaceItems = countrySpaceItems;
+    public void setcountryEnergy(HashMap<String, ArrayList<countryEnergy>> countryEnergy) {
+        this.countryEnergy = countryEnergy;
     }
 
     public ArrayList<String> getUniqueCountries() {
-        Set<String> countrySet = countrySpaceItems.keySet();
+        Set<String> countrySet = countryEnergy.keySet();
         ArrayList<String> countryList = new ArrayList<String>(countrySet);
         Collections.sort(countryList);
         return countryList;
@@ -52,16 +52,16 @@ public class DataExtract {
                 fileColCounter++;
                 continue;
             }
-            tempArr = line.split(delimiter);
+            tempArr = line.split(comma);
             country = tempArr[0];
 
-            ArrayList<countryEnergy> things = countrySpaceItems.get(country);
+            ArrayList<countryEnergy> things = countryEnergy.get(country);
             if (things == null) {
                 things = new ArrayList<countryEnergy>();
             }
 
             things.add(new countryEnergy(country, tempArr[1], Double.parseDouble(tempArr[2])));
-            countrySpaceItems.put(country, things);
+            countryEnergy.put(country, things);
 
             yearSet.add(tempArr[2]);
         }
