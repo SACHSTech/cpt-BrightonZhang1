@@ -43,12 +43,24 @@ public class BarOne extends Application {
   ArrayList<String> years;
   HashMap<String, ArrayList<Energy>> countryEnergy;
 
+  @Override
+    public void start(Stage primaryStage) throws IOException {
+        Parent root = createContent();
+        primaryStage.setTitle("Bar Chart Example");
+        primaryStage.setScene(new Scene(root, 1280, 720));
+        primaryStage.show();
+    }
+
   public Parent createContent() throws IOException {
     dataExtract.csvConvert();
     countryEnergy = dataExtract.getcountryEnergy();
     years = dataExtract.getYearList();
     int n = years.size();
     String arrYears[] = new String[n];
+
+    TabPane tabPane = new TabPane();
+    Tab tab1 = new Tab();
+    tab1.setText("Bar Chart");
 
     // Copying contents of set to array
     System.arraycopy(years.toArray(), 0, arrYears, 0, n);
@@ -77,7 +89,6 @@ public class BarOne extends Application {
 
     ObservableList<BarChart.Series> barChartData = FXCollections.observableArrayList(series);
 
-    Menu assemble = new Menu("Options");
     final MenuBar menuBar = new MenuBar();
     chart = new BarChart(xAxis, yAxis, barChartData, 25.0d);
     VBox vbox = new VBox();
@@ -96,16 +107,16 @@ public class BarOne extends Application {
     // ObservableList list = root.getChildren();
 
     hbox.getChildren().addAll(cb1, dropdown);
-    vbox.getChildren().addAll(hbox, chart);
+    vbox.getChildren().addAll(menuBar, hbox, chart);
+    tab1.setContent(vbox);
+    tabPane.getTabs().add(tab1);
 
-    return vbox;
+    Tab tab2 = new Tab();
+    tab2.setText("Another Tab");
+    tab2.setContent(new Label("This is the content for another tab"));
+    tabPane.getTabs().add(tab2);
 
-  }
-
-  @Override
-  public void start(Stage primaryStage) throws Exception {
-    primaryStage.setScene(new Scene(createContent(), 1280, 720 ));
-    primaryStage.show();
+    return tabPane;
   }
 
   /**
