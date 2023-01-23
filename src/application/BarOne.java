@@ -112,9 +112,14 @@ public class BarOne extends Application {
     tabPane.getTabs().add(tab1);
 
     Tab tab2 = new Tab();
-    tab2.setText("Another Tab");
+    tab2.setText("Tab 2");
     tab2.setContent(new Label("This is the content for another tab"));
     tabPane.getTabs().add(tab2);
+
+    Tab tab3 = new Tab();
+    tab3.setText("Tab 3");
+    tab3.setContent(new Label("This is the content for another tab"));
+    tabPane.getTabs().add(tab3);
 
     return tabPane;
   }
