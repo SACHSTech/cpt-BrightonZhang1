@@ -8,13 +8,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class DataExtract {
     public static final String delimiter = ",";
     ArrayList<String> yearList = new ArrayList<String>();
-    HashMap<String, ArrayList<Energy>> countrySpaceItems = new HashMap<String, ArrayList<SpaceItem>>();
+    HashMap<String, ArrayList<countryEnergy>> countrySpaceItems = new HashMap<String, ArrayList<countryEnergy>>();
 
     public ArrayList<String> getYearList() {
         return yearList;
@@ -24,11 +23,11 @@ public class DataExtract {
         this.yearList = yearSet;
     }
 
-    public HashMap<String, ArrayList<SpaceItem>> getCountrySpaceItems() {
+    public HashMap<String, ArrayList<countryEnergy>> getCountrySpaceItems() {
         return countrySpaceItems;
     }
 
-    public void setCountrySpaceItems(HashMap<String, ArrayList<SpaceItem>> countrySpaceItems) {
+    public void setCountrySpaceItems(HashMap<String, ArrayList<countryEnergy>> countrySpaceItems) {
         this.countrySpaceItems = countrySpaceItems;
     }
 
@@ -43,7 +42,7 @@ public class DataExtract {
         Set<String> yearSet = new HashSet<String>();
         String country = "";
         int fileColCounter = 0;
-        File file = new File("C:/Users/buyat/Downloads/objectsInSpace.csv");
+        File file = new File("C:/Users/brigh/Downloads/energy.csv");
         FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
         String line = " ";
@@ -56,12 +55,12 @@ public class DataExtract {
             tempArr = line.split(delimiter);
             country = tempArr[0];
 
-            ArrayList<SpaceItem> things = countrySpaceItems.get(country);
+            ArrayList<countryEnergy> things = countrySpaceItems.get(country);
             if (things == null) {
-                things = new ArrayList<SpaceItem>();
+                things = new ArrayList<countryEnergy>();
             }
-            // ArrayList<SpaceItem> createThing = new ArrayList<SpaceItem>();
-            things.add(new SpaceItem(country, tempArr[1], tempArr[2], Integer.parseInt(tempArr[3])));
+
+            things.add(new countryEnergy(country, tempArr[1], Double.parseDouble(tempArr[2])));
             countrySpaceItems.put(country, things);
 
             yearSet.add(tempArr[2]);
@@ -70,4 +69,4 @@ public class DataExtract {
         yearList = new ArrayList<String>(yearSet);
         Collections.sort(yearList);
     }
-}
+} 
