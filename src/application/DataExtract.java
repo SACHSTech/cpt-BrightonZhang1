@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class DataExtract {
-    public static final String comma = ",";
+    public static String comma = ",";
     ArrayList<String> yearList = new ArrayList<String>();
     HashMap<String, ArrayList<countryEnergy>> countryEnergy = new HashMap<String, ArrayList<countryEnergy>>();
 
@@ -34,6 +34,7 @@ public class DataExtract {
     public ArrayList<String> getUniqueCountries() {
         Set<String> countrySet = countryEnergy.keySet();
         ArrayList<String> countryList = new ArrayList<String>(countrySet);
+        // use merge sort
         Collections.sort(countryList);
         return countryList;
     }
