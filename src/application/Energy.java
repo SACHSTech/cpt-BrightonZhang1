@@ -1,11 +1,11 @@
 package application;
 
-public class countryEnergy {
+public class Energy {
     private String strCountry;
     private String intYear;
     private double dblkWh;
 
-    public countryEnergy(String country, String year, double kWh){
+    public Energy(String country, String year, double kWh){
         strCountry = country;
         intYear = year;
         dblkWh = kWh;
