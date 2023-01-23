@@ -31,7 +31,7 @@ import javafx.stage.Stage;
  * discontinuous or discrete data.
  */
 public class BarOne extends Application {
-  DataExtract m = new DataExtract();
+  DataExtract dataExtract = new DataExtract();
 
   public void setCountryEnergy(HashMap<String, ArrayList<Energy>> countryEnergys) {
     this.countryEnergy = countryEnergys;
@@ -44,16 +44,15 @@ public class BarOne extends Application {
   HashMap<String, ArrayList<Energy>> countryEnergy;
 
   public Parent createContent() throws IOException {
-    m.csvConvert();
-    countryEnergy = m.getcountryEnergy();
-    years = m.getYearList();
+    dataExtract.csvConvert();
+    countryEnergy = dataExtract.getcountryEnergy();
+    years = dataExtract.getYearList();
     int n = years.size();
     String arrYears[] = new String[n];
 
-    // Copying contents of s to arr[]
+    // Copying contents of set to array
     System.arraycopy(years.toArray(), 0, arrYears, 0, n);
 
-    // String[] years = this.years.toArray();
     xAxis = new CategoryAxis();
     xAxis.setCategories(FXCollections.<String>observableArrayList(arrYears));
     yAxis = new NumberAxis("kWh / Person", 0.0d, 130000.0d, 5000.0d);
@@ -61,13 +60,17 @@ public class BarOne extends Application {
 
     for (Map.Entry<String, ArrayList<Energy>> set : countryEnergy.entrySet()) {
       String country = set.getKey();
+
+      // Converts values from set to arraylist
       ArrayList<Energy> items = set.getValue();
       ArrayList<BarChart.Data> data = new ArrayList<BarChart.Data>();
 
+      // adds year and energy to data arraylist
       for (Energy item : items) {
         data.add(new BarChart.Data(item.getIntYear(), item.getDblkWh()));
 
       }
+      // adds barchart data from data arraylist
       series.add(new BarChart.Series(country, FXCollections.observableArrayList(data)));
 
     }
@@ -80,8 +83,8 @@ public class BarOne extends Application {
     VBox vbox = new VBox();
     HBox hbox = new HBox();
 
-    vbox.setMaxSize(900, 600);
-    chart.setMaxSize(880, 560);
+    vbox.setMaxSize(1280, 720);
+    chart.setMaxSize(1280, 720);
 
     hbox.setPadding(new Insets(10, 10, 10, 10));
     vbox.setSpacing(10);
@@ -89,7 +92,7 @@ public class BarOne extends Application {
     CheckBox cb1 = new CheckBox("All Countries");
     ChoiceBox dropdown = new ChoiceBox();
 
-    dropdown.getItems().addAll(m.getUniqueCountries());
+    dropdown.getItems().addAll(dataExtract.getUniqueCountries());
     // ObservableList list = root.getChildren();
 
     hbox.getChildren().addAll(cb1, dropdown);
@@ -101,19 +104,7 @@ public class BarOne extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    TabPane tabPane = new TabPane();
-    Tab tab1 = new Tab("Planes", new Label("Show all planes available"));
-    Tab tab2 = new Tab("Cars"  , new Label("Show all cars available"));
-    Tab tab3 = new Tab("Boats" , new Label("Show all boats available"));
-
-    tabPane.getTabs().add(tab1);
-    tabPane.getTabs().add(tab2);
-    tabPane.getTabs().add(tab3);
-
-    VBox vBox = new VBox(tabPane);
-    Scene scene = new Scene(vBox);
-
-    primaryStage.setScene(new Scene(createContent(), 800, 600 ));
+    primaryStage.setScene(new Scene(createContent(), 1280, 720 ));
     primaryStage.show();
   }
 
