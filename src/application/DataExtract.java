@@ -31,12 +31,27 @@ public class DataExtract {
         this.countryEnergy = countryEnergy;
     }
 
+    static void selectionSort(ArrayList <String> array) {
+        for (int sorted = 0; sorted < array.size() - 1; sorted++){
+            int smallestIndex = sorted;
+
+            for(int check = sorted + 1; check < array.size(); check++)
+                if(array.get(check).compareTo(array.get(smallestIndex)) < 0)
+                    smallestIndex = check;
+
+            String temp = array.get(smallestIndex);
+            array.set(smallestIndex, array.get(sorted));
+            // array[smallestIndex] = array[sorted];
+            array.set(sorted, temp);
+        }
+    }
+
     public ArrayList<String> getUniqueCountries() {
         Set<String> countrySet = countryEnergy.keySet();
         ArrayList<String> countryList = new ArrayList<String>(countrySet);
 
         // merge sort HERE
-        Collections.sort(countryList);
+        selectionSort(countryList);
         return countryList;
     }
  
@@ -72,7 +87,7 @@ public class DataExtract {
         br.close();
         yearList = new ArrayList<String>(yearSet);
 
-        // MERGE SORT HERE
-        Collections.sort(yearList);
+        // SORT HERE
+        selectionSort(yearList);
     }
 } 
