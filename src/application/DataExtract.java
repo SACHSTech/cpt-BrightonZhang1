@@ -34,6 +34,9 @@ public class DataExtract {
     public ArrayList<String> getUniqueCountries() {
         Set<String> countrySet = countryEnergy.keySet();
         ArrayList<String> countryList = new ArrayList<String>(countrySet);
+
+        // merge sort HERE
+        Collections.sort(countryList);
         return countryList;
     }
  
@@ -41,7 +44,7 @@ public class DataExtract {
         Set<String> yearSet = new HashSet<String>();
         String country = "";
         int fileColCounter = 0;
-        File file = new File("C:/Users/brigh/Downloads/energy.csv");
+        File file = new File("C:/Users/brigh/github-classroom/SACHSTech/cpt-BrightonZhang1/src/energy.csv");
         FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
         String line = " ";
@@ -68,6 +71,8 @@ public class DataExtract {
         }
         br.close();
         yearList = new ArrayList<String>(yearSet);
+
+        // MERGE SORT HERE
         Collections.sort(yearList);
     }
 } 
