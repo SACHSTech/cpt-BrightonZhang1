@@ -11,7 +11,6 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.stage.Stage;
  
- 
 /**
  * A chart that displays rectangular bars with heights indicating data values
  * for categories. Used for displaying information when at least one axis has
