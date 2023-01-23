@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.event.ChangeListener;
+
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -14,9 +18,9 @@ import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -62,7 +66,7 @@ public class BarOne extends Application {
     Tab tab1 = new Tab();
     tab1.setText("Bar Chart");
 
-    // Copying contents of set to array
+    // Copies contents of the set to array
     System.arraycopy(years.toArray(), 0, arrYears, 0, n);
 
     xAxis = new CategoryAxis();
@@ -91,8 +95,15 @@ public class BarOne extends Application {
 
     final MenuBar menuBar = new MenuBar();
     chart = new BarChart(xAxis, yAxis, barChartData, 25.0d);
+
+    
     VBox vbox = new VBox();
     HBox hbox = new HBox();
+
+    Label title = new Label("Energy Consumption Bar Graph");
+    title.setStyle("-fx-font-size: 30px;");
+    title.setPadding(new Insets(0,0,-90,450));
+    vbox.getChildren().add(0, title);
 
     vbox.setMaxSize(1280, 720);
     chart.setMaxSize(1280, 720);
@@ -100,13 +111,79 @@ public class BarOne extends Application {
     hbox.setPadding(new Insets(10, 10, 10, 10));
     vbox.setSpacing(10);
     hbox.setSpacing(10);
-    CheckBox cb1 = new CheckBox("All Countries");
-    ChoiceBox dropdown = new ChoiceBox();
+    
+    CheckBox joulesCheckbox = new CheckBox("View in Joules");
+    joulesCheckbox.setSelected(false);
 
-    dropdown.getItems().addAll(dataExtract.getUniqueCountries());
-    // ObservableList list = root.getChildren();
+    // Store the original upper and lower bounds of the y-axis
+    double originalUpperBound = yAxis.getUpperBound();
+    double originalLowerBound = yAxis.getLowerBound();
 
-    hbox.getChildren().addAll(cb1, dropdown);
+    joulesCheckbox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+        if (newVal) {
+            // Convert the upper and lower bounds of the y-axis
+            yAxis.setUpperBound(originalUpperBound * 3600000);
+            yAxis.setLowerBound(originalLowerBound * 3600000);
+            yAxis.setLabel("Joules / Person");
+            for (XYChart.Series<String, Number> s : (ObservableList<XYChart.Series<String, Number>>) chart.getData()) {
+                for (XYChart.Data<String, Number> d : s.getData()) {
+                    d.setYValue(d.getYValue().doubleValue() * 3600000);
+                }
+            }
+        } else {
+            yAxis.setUpperBound(originalUpperBound);
+            yAxis.setLowerBound(originalLowerBound);
+            yAxis.setLabel("kWh / Person");
+            for (XYChart.Series<String, Number> s : (ObservableList<XYChart.Series<String, Number>>) chart.getData()) {
+                for (XYChart.Data<String, Number> d : s.getData()) {
+                    d.setYValue(d.getYValue().doubleValue() / 3600000);
+                }
+            }
+        }
+    });
+
+    ChoiceBox<String> countryChoice = new ChoiceBox<>();
+    // create a new list with all countries and add "All countries" as the first option
+    ArrayList<String> countriesList = new ArrayList<>(countryEnergy.keySet());
+    countriesList.add(0, "All countries");
+    countryChoice.setItems(FXCollections.observableArrayList(countriesList));
+
+    // select the "All countries" option as the default
+    countryChoice.getSelectionModel().selectFirst();
+
+    countryChoice.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> ov, String oldVal, String newVal) -> {
+        ArrayList<BarChart.Data> data = new ArrayList<BarChart.Data>();
+
+        // Clear the chart's data
+        chart.getData().clear();
+
+        if (newVal.equals("All countries")) {
+            // Add all the country data to the chart
+            for (Map.Entry<String, ArrayList<Energy>> set : countryEnergy.entrySet()) {
+                String country = set.getKey();
+                ArrayList<Energy> items = set.getValue();
+
+                for (Energy item : items) {
+                    data.add(new BarChart.Data(item.getIntYear(), item.getDblkWh()));
+                }
+                chart.getData().add(new BarChart.Series(country, FXCollections.observableArrayList(data)));
+                data.clear();
+            }
+        } else {
+            // Get the energy data for the selected country
+            ArrayList<Energy> items = countryEnergy.get(newVal);
+
+            // Add the year and energy data to the data arraylist
+            for (Energy item : items) {
+                data.add(new BarChart.Data(item.getIntYear(), item.getDblkWh()));
+            }
+
+            // Add the new data to the chart
+            chart.getData().add(new BarChart.Series(newVal, FXCollections.observableArrayList(data)));
+        }
+    });
+
+    hbox.getChildren().addAll(joulesCheckbox, countryChoice);
     vbox.getChildren().addAll(menuBar, hbox, chart);
     tab1.setContent(vbox);
     tabPane.getTabs().add(tab1);
