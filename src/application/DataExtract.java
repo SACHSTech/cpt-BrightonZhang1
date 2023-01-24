@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,7 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class DataExtract {
-    public static String comma = ",";
+    private static String comma = ",";
     ArrayList<String> yearList = new ArrayList<String>();
     HashMap<String, ArrayList<Energy>> countryEnergy = new HashMap<String, ArrayList<Energy>>();
 
