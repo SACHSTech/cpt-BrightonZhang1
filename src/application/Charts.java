@@ -18,7 +18,6 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -31,9 +30,12 @@ import javafx.scene.layout.VBox;
 public class Charts {
     private HashMap<String, ArrayList<Energy>> countryEnergy;
     private ArrayList<String> years;
-    private BarChart chart;
-    private CategoryAxis xAxis;
-    private NumberAxis yAxis;
+    private BarChart chartOne;
+    private LineChart chartTwo;
+    private CategoryAxis xAxisBar;
+    private NumberAxis yAxisBar;
+    private CategoryAxis xAxisLine;
+    private NumberAxis yAxisLine;
 
     public Charts(HashMap<String, ArrayList<Energy>> countryEnergy, ArrayList<String> years) {
         this.countryEnergy = countryEnergy;
@@ -50,10 +52,10 @@ public class Charts {
         // Bar chart code
         ArrayList<BarChart.Series> series = new ArrayList<BarChart.Series>();
 
-        xAxis = new CategoryAxis();
-        xAxis.setCategories(FXCollections.<String>observableArrayList(arrYears));
-        yAxis = new NumberAxis("kWh / Person", 0.0d, 130000.0d, 5000.0d);
-        xAxis.setLabel("Years (2000 - 2021)");
+        xAxisBar = new CategoryAxis();
+        xAxisBar.setCategories(FXCollections.<String>observableArrayList(arrYears));
+        yAxisBar = new NumberAxis("kWh / Person", 0.0d, 130000.0d, 5000.0d);
+        xAxisBar.setLabel("Years (2000 - 2021)");
 
         for (Map.Entry<String, ArrayList<Energy>> set : countryEnergy.entrySet()) {
           String country = set.getKey();
@@ -74,9 +76,7 @@ public class Charts {
       
         ObservableList<BarChart.Series> barChartData = FXCollections.observableArrayList(series);
       
-        final MenuBar menuBar = new MenuBar();
-        chart = new BarChart(xAxis, yAxis, barChartData, 25.0d);
-      
+        chartOne = new BarChart(xAxisBar, yAxisBar, barChartData, 25.0d);
         
         VBox vbox = new VBox();
         HBox hbox = new HBox();
@@ -87,7 +87,7 @@ public class Charts {
         vbox.getChildren().add(0, titleOne);
       
         vbox.setMaxSize(1280, 720);
-        chart.setMaxSize(1280, 720);
+        chartOne.setMaxSize(1280, 720);
       
         hbox.setPadding(new Insets(10, 10, 10, 10));
         vbox.setSpacing(10);
@@ -98,22 +98,22 @@ public class Charts {
         joulesCheckbox.setSelected(false);
       
         // Store the original upper and lower bounds of the y-axis
-        double originalUpperBound = yAxis.getUpperBound();
-        double originalLowerBound = yAxis.getLowerBound();
+        double originalUpperBound = yAxisBar.getUpperBound();
+        double originalLowerBound = yAxisBar.getLowerBound();
       
-        // variable to store the original tick unit of the y-axis
-        double originalTickUnit = yAxis.getTickUnit();
+        // variable tao store the original tick unit of the y-axis
+        double originalTickUnit = yAxisBar.getTickUnit();
       
         joulesCheckbox.selectedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 // Convert the upper and lower bounds of the y-axis
-                yAxis.setUpperBound(originalUpperBound * 3600000);
-                yAxis.setLowerBound(originalLowerBound * 3600000);
-                yAxis.setLabel("Joules / Person");
+                yAxisBar.setUpperBound(originalUpperBound * 3600000);
+                yAxisBar.setLowerBound(originalLowerBound * 3600000);
+                yAxisBar.setLabel("Joules / Person");
       
                 // Sets ticks for Joules
-                yAxis.setTickUnit(originalTickUnit * 3600000);
-                for (XYChart.Series<String, Number> s : (ObservableList<XYChart.Series<String, Number>>) chart.getData()) {
+                yAxisBar.setTickUnit(originalTickUnit * 3600000);
+                for (XYChart.Series<String, Number> s : (ObservableList<XYChart.Series<String, Number>>) chartOne.getData()) {
                     for (XYChart.Data<String, Number> d : s.getData()) {
                         d.setYValue(d.getYValue().doubleValue() * 3600000);
                     }
@@ -121,11 +121,11 @@ public class Charts {
             } 
             
             else {
-                yAxis.setUpperBound(originalUpperBound);
-                yAxis.setLowerBound(originalLowerBound);
-                yAxis.setLabel("kWh / Person");
-                yAxis.setTickUnit(originalTickUnit);
-                for (XYChart.Series<String, Number> s : (ObservableList<XYChart.Series<String, Number>>) chart.getData()) {
+                yAxisBar.setUpperBound(originalUpperBound);
+                yAxisBar.setLowerBound(originalLowerBound);
+                yAxisBar.setLabel("kWh / Person");
+                yAxisBar.setTickUnit(originalTickUnit);
+                for (XYChart.Series<String, Number> s : (ObservableList<XYChart.Series<String, Number>>) chartOne.getData()) {
                     for (XYChart.Data<String, Number> d : s.getData()) {
                         d.setYValue(d.getYValue().doubleValue() / 3600000);
                     }
@@ -146,7 +146,7 @@ public class Charts {
             ArrayList<BarChart.Data> data = new ArrayList<BarChart.Data>();
             joulesCheckbox.setSelected(false);
             // Clear the chart's data
-            chart.getData().clear();
+            chartOne.getData().clear();
             if (newVal.equals("All countries")) {
                 // Add all the country data to the chart
                 for (Map.Entry<String, ArrayList<Energy>> set : countryEnergy.entrySet()) {
@@ -156,7 +156,7 @@ public class Charts {
                     for (Energy item : items) {
                         data.add(new BarChart.Data(item.getIntYear(), item.getDblkWh()));
                     }
-                    chart.getData().add(new BarChart.Series(country, FXCollections.observableArrayList(data)));
+                    chartOne.getData().add(new BarChart.Series(country, FXCollections.observableArrayList(data)));
                     data.clear();
                 }
             } 
@@ -171,7 +171,7 @@ public class Charts {
                 }
       
                 // Add the new data to the chart
-                chart.getData().add(new BarChart.Series(newVal, FXCollections.observableArrayList(data)));
+                chartOne.getData().add(new BarChart.Series(newVal, FXCollections.observableArrayList(data)));
             }
         });
 
@@ -180,24 +180,23 @@ public class Charts {
         tab1.setText("Bar Chart");
         tab1.setClosable(false);
         hbox.getChildren().addAll(joulesCheckbox, countryChoice);
-        vbox.getChildren().addAll(menuBar, hbox, chart);
+        vbox.getChildren().addAll(hbox, chartOne);
         tab1.setContent(vbox);
         tabPane.getTabs().add(tab1);
       
         // Creating tab 2 for line chart
-        Tab tab2 = new Tab();
-        tab2.setText("Tab 2");
-        tab2.setClosable(false);
+        VBox vboxOne = new VBox();
+        HBox hboxOne = new HBox();
 
         // Copies contents of the set to array
         System.arraycopy(years.toArray(), 0, arrYears, 0, n);
 
-        xAxis = new CategoryAxis();
-        xAxis.setCategories(FXCollections.<String>observableArrayList(arrYears));
-        yAxis = new NumberAxis("kWh / Person", 0.0d, 130000.0d, 5000.0d);
-        xAxis.setLabel("Years (2000 - 2021)");
-
         ArrayList<XYChart.Series> seriesOne = new ArrayList<XYChart.Series>();
+
+        xAxisLine = new CategoryAxis();
+        xAxisLine.setCategories(FXCollections.<String>observableArrayList(arrYears));
+        yAxisLine = new NumberAxis("kWh / Person", 0.0d, 130000.0d, 5000.0d);
+        xAxisLine.setLabel("Years (2000 - 2021)");
 
         for (Map.Entry<String, ArrayList<Energy>> set : countryEnergy.entrySet()) {
             String country = set.getKey();
@@ -217,27 +216,27 @@ public class Charts {
         ObservableList<XYChart.Series> lineChartData = FXCollections.observableArrayList(seriesOne);
 
         // Line chart code
-        final LineChart chart = new LineChart(xAxis, yAxis, lineChartData);
-
-        VBox vboxOne = new VBox();
-        HBox hboxOne = new HBox();
+        chartTwo = new LineChart(xAxisLine, yAxisLine, lineChartData);
 
         Label titleTwo = new Label("Energy Consumption Line Graph");
         titleTwo.setStyle("-fx-font-size: 30px;");
-        titleTwo.setPadding(new Insets(0,0,-90, 460));
+        titleTwo.setPadding(new Insets(20, 0, 0, 460));
+        
         vboxOne.getChildren().add(0, titleTwo);
 
         vboxOne.setMaxSize(1280, 720);
-        chart.setMaxSize(1280, 720);
+        chartTwo.setMaxSize(1280, 720);
 
         hboxOne.setPadding(new Insets(10, 10, 10, 10));
         vboxOne.setSpacing(10);
         hboxOne.setAlignment(Pos.CENTER);
-        vboxOne.getChildren().add(chart);
+        vboxOne.getChildren().add(chartTwo);
 
-        tab2.setContent(vboxOne);
-        tabPane.getTabs().add(tab2);
+        Tab tab2 = new Tab("Line Chart", vboxOne);
+        tab2.setClosable(false);
       
+        tabPane.getTabs().add(tab2);
+
         // Data table code
         Tab tab3 = new Tab();
         tab3.setText("Data Table");
@@ -262,6 +261,11 @@ public class Charts {
         table.getColumns().addAll(yearCol, countryCol, energyCol);
       
         VBox dataTableContainer = new VBox();
+        Label titleThree = new Label("Data Table");
+        titleThree.setStyle("-fx-font-size: 30px;");
+        titleThree.setPadding(new Insets(-100, 0, 0, 0));
+        
+        dataTableContainer.getChildren().add(0, titleThree);
         dataTableContainer.setAlignment(Pos.CENTER);
         dataTableContainer.getChildren().add(table);
         tab3.setContent(dataTableContainer);
