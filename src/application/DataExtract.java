@@ -51,9 +51,6 @@ public class DataExtract {
     public ArrayList<String> getUniqueCountries() {
         Set<String> countrySet = countryEnergy.keySet();
         ArrayList<String> countryList = new ArrayList<String>(countrySet);
-
-        // merge sort HERE
-        selectionSort(countryList);
         return countryList;
     }
  
@@ -89,7 +86,7 @@ public class DataExtract {
         br.close();
         yearList = new ArrayList<String>(yearSet);
 
-        // SORT HERE
+        // Sorts years in chart
         selectionSort(yearList);
     }
 

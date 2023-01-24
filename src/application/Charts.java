@@ -93,9 +93,9 @@ public class Charts {
         vbox.setSpacing(10);
         hbox.setSpacing(10);
         
-        CheckBox joulesCheckbox = new CheckBox("View in Joules");
-        joulesCheckbox.setPadding(new Insets(0, 0, 0, 75));
-        joulesCheckbox.setSelected(false);
+        CheckBox joulesCheckboxOne = new CheckBox("View in Joules");
+        joulesCheckboxOne.setPadding(new Insets(0, 0, 0, 75));
+        joulesCheckboxOne.setSelected(false);
       
         // Store the original upper and lower bounds of the y-axis
         double originalUpperBound = yAxisBar.getUpperBound();
@@ -104,7 +104,7 @@ public class Charts {
         // variable tao store the original tick unit of the y-axis
         double originalTickUnit = yAxisBar.getTickUnit();
       
-        joulesCheckbox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+        joulesCheckboxOne.selectedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 // Convert the upper and lower bounds of the y-axis
                 yAxisBar.setUpperBound(originalUpperBound * 3600000);
@@ -133,18 +133,18 @@ public class Charts {
             }
         });
       
-        ChoiceBox<String> countryChoice = new ChoiceBox<>();
+        ChoiceBox<String> countryChoiceOne = new ChoiceBox<>();
         // create a new list with all countries and add "All countries" as the first option
         ArrayList<String> countriesList = new ArrayList<>(countryEnergy.keySet());
         countriesList.add(0, "All countries");
-        countryChoice.setItems(FXCollections.observableArrayList(countriesList));
+        countryChoiceOne.setItems(FXCollections.observableArrayList(countriesList));
       
         // select the "All countries" option as the default
-        countryChoice.getSelectionModel().selectFirst();
+        countryChoiceOne.getSelectionModel().selectFirst();
       
-        countryChoice.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> ov, String oldVal, String newVal) -> {
+        countryChoiceOne.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> ov, String oldVal, String newVal) -> {
             ArrayList<BarChart.Data> data = new ArrayList<BarChart.Data>();
-            joulesCheckbox.setSelected(false);
+            joulesCheckboxOne.setSelected(false);
             // Clear the chart's data
             chartOne.getData().clear();
             if (newVal.equals("All countries")) {
@@ -179,7 +179,7 @@ public class Charts {
         Tab tab1 = new Tab();
         tab1.setText("Bar Chart");
         tab1.setClosable(false);
-        hbox.getChildren().addAll(joulesCheckbox, countryChoice);
+        hbox.getChildren().addAll(joulesCheckboxOne, countryChoiceOne);
         vbox.getChildren().addAll(hbox, chartOne);
         tab1.setContent(vbox);
         tabPane.getTabs().add(tab1);
@@ -221,6 +221,83 @@ public class Charts {
         Label titleTwo = new Label("Energy Consumption Line Graph");
         titleTwo.setStyle("-fx-font-size: 30px;");
         titleTwo.setPadding(new Insets(20, 0, 0, 460));
+
+        CheckBox joulesCheckboxTwo = new CheckBox("View in Joules");
+        joulesCheckboxTwo.setPadding(new Insets(-960, 910, 0, 0));
+        joulesCheckboxTwo.setSelected(false);
+
+        // Joules checkbox for the line chart
+        joulesCheckboxTwo.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                // Convert the upper and lower bounds of the y-axis
+                yAxisLine.setUpperBound(originalUpperBound * 3600000);
+                yAxisLine.setLowerBound(originalLowerBound * 3600000);
+                yAxisLine.setLabel("Joules / Person");
+      
+                // Sets ticks for Joules
+                yAxisLine.setTickUnit(originalTickUnit * 3600000);
+                for (XYChart.Series<String, Number> s : (ObservableList<XYChart.Series<String, Number>>) chartTwo.getData()) {
+                    for (XYChart.Data<String, Number> d : s.getData()) {
+                        d.setYValue(d.getYValue().doubleValue() * 3600000);
+                    }
+                }
+            } 
+            
+            else {
+                yAxisLine.setUpperBound(originalUpperBound);
+                yAxisLine.setLowerBound(originalLowerBound);
+                yAxisLine.setLabel("kWh / Person");
+                yAxisLine.setTickUnit(originalTickUnit);
+                for (XYChart.Series<String, Number> s : (ObservableList<XYChart.Series<String, Number>>) chartTwo.getData()) {
+                    for (XYChart.Data<String, Number> d : s.getData()) {
+                        d.setYValue(d.getYValue().doubleValue() / 3600000);
+                    }
+                }
+            }
+        });
+
+        // Choice box for line chart
+        ChoiceBox<String> countryChoiceTwo = new ChoiceBox<>();
+        // create a new list with all countries and add "All countries" as the first option
+        countryChoiceTwo.setTranslateX(-900);
+        countryChoiceTwo.setTranslateY(-475);
+        countryChoiceTwo.setItems(FXCollections.observableArrayList(countriesList));
+      
+        // select the "All countries" option as the default
+        countryChoiceTwo.getSelectionModel().selectFirst();
+      
+        countryChoiceTwo.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> ov, String oldVal, String newVal) -> {
+            ArrayList<BarChart.Data> data = new ArrayList<BarChart.Data>();
+            joulesCheckboxTwo.setSelected(false);
+            // Clear the chart's data
+            chartTwo.getData().clear();
+            if (newVal.equals("All countries")) {
+                // Add all the country data to the chart
+                for (Map.Entry<String, ArrayList<Energy>> set : countryEnergy.entrySet()) {
+                    String country = set.getKey();
+                    ArrayList<Energy> items = set.getValue();
+      
+                    for (Energy item : items) {
+                        data.add(new BarChart.Data(item.getIntYear(), item.getDblkWh()));
+                    }
+                    chartTwo.getData().add(new BarChart.Series(country, FXCollections.observableArrayList(data)));
+                    data.clear();
+                }
+            } 
+            
+            else {
+                // Get the energy data for the selected country
+                ArrayList<Energy> items = countryEnergy.get(newVal);
+      
+                // Add the year and energy data to the data arraylist
+                for (Energy item : items) {
+                    data.add(new BarChart.Data(item.getIntYear(), item.getDblkWh()));
+                }
+      
+                // Add the new data to the chart
+                chartTwo.getData().add(new BarChart.Series(newVal, FXCollections.observableArrayList(data)));
+            }
+        });
         
         vboxOne.getChildren().add(0, titleTwo);
 
@@ -228,9 +305,10 @@ public class Charts {
         chartTwo.setMaxSize(1280, 720);
 
         hboxOne.setPadding(new Insets(10, 10, 10, 10));
+        hboxOne.getChildren().addAll(joulesCheckboxTwo, countryChoiceTwo);
         vboxOne.setSpacing(10);
         hboxOne.setAlignment(Pos.CENTER);
-        vboxOne.getChildren().add(chartTwo);
+        vboxOne.getChildren().addAll(chartTwo, hboxOne);
 
         Tab tab2 = new Tab("Line Chart", vboxOne);
         tab2.setClosable(false);
