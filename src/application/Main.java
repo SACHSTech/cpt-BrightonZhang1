@@ -11,6 +11,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -22,6 +23,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -205,8 +209,32 @@ public class Main extends Application {
     tabPane.getTabs().add(tab2);
 
     Tab tab3 = new Tab();
-    tab3.setText("Tab 3");
-    tab3.setContent(new Label("This is the content for another tab"));
+    tab3.setText("Data Table");
+    
+    TableView<Energy> table = new TableView<Energy>();
+    ObservableList<Energy> data = FXCollections.observableArrayList();
+    
+    for (Map.Entry<String, ArrayList<Energy>> set : countryEnergy.entrySet()) {
+      ArrayList<Energy> items = set.getValue();
+      data.addAll(items);
+    }
+    
+    TableColumn<Energy, String> countryCol = new TableColumn<Energy, String>("Country");
+    countryCol.setCellValueFactory(new PropertyValueFactory<Energy, String>("strCountry"));
+    TableColumn<Energy, Integer> yearCol = new TableColumn<Energy, Integer>("Year");
+    yearCol.setCellValueFactory(new PropertyValueFactory<Energy, Integer>("intYear"));
+    TableColumn<Energy, Double> energyCol = new TableColumn<Energy, Double>("Energy (kWh/person)");
+    energyCol.setCellValueFactory(new PropertyValueFactory<Energy, Double>("dblkWh"));
+    
+    table.setItems(data);
+    table.getColumns().addAll(yearCol, countryCol, energyCol);
+
+    VBox dataTableContainer = new VBox();
+    dataTableContainer.setAlignment(Pos.CENTER);
+    dataTableContainer.getChildren().add(table);
+    tab3.setContent(dataTableContainer);
+    dataTableContainer.setPadding(new Insets(10));
+
     tabPane.getTabs().add(tab3);
 
     return tabPane;

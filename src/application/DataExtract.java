@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class DataExtract {
     public static String comma = ",";
@@ -89,4 +93,13 @@ public class DataExtract {
         // SORT HERE
         selectionSort(yearList);
     }
+
+    public ObservableList<Energy> getAllEnergyData(){
+        ArrayList<Energy> allEnergyData = new ArrayList<Energy>();
+        for (Map.Entry<String, ArrayList<Energy>> set : countryEnergy.entrySet()) {
+          allEnergyData.addAll(set.getValue());
+        }
+        return FXCollections.observableArrayList(allEnergyData);
+      }
+      
 } 
