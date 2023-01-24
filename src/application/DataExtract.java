@@ -31,7 +31,7 @@ public class DataExtract {
         this.countryEnergy = countryEnergy;
     }
 
-    static void selectionSort(ArrayList <String> array) {
+    public void selectionSort(ArrayList <String> array) {
         for (int sorted = 0; sorted < array.size() - 1; sorted++){
             int smallestIndex = sorted;
 
@@ -41,7 +41,6 @@ public class DataExtract {
 
             String temp = array.get(smallestIndex);
             array.set(smallestIndex, array.get(sorted));
-            // array[smallestIndex] = array[sorted];
             array.set(sorted, temp);
         }
     }
