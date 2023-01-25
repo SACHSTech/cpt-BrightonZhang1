@@ -5,4 +5,7 @@ This data represents the amount of energy consumed per person in 10 different co
 
 Data Source Link: https://ourworldindata.org/energy
 
-* Check the [VS Code, Java, and JavaFX Install and Set Up](https://docs.google.com/document/d/1s5oTmY8A8TDZu303p_DaH6CEAcC9xL8-aNX-pAxCcps/edit?usp=sharing) doc for set up and getting started instructions.
+Course Connections Link: https://drive.google.com/file/d/1Oarkl4bFo_dvfltgJGAVqR648N5UnLBK/view?usp=sharing
+
+Demo Video Link: 
+
