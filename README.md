@@ -7,5 +7,5 @@ Data Source Link: https://ourworldindata.org/energy
 
 Course Connections Link: https://drive.google.com/file/d/1Oarkl4bFo_dvfltgJGAVqR648N5UnLBK/view?usp=sharing
 
-Demo Video Link: 
+Demo Video Link: https://drive.google.com/file/d/13Y7OkM7LWImCL6_cnN9cKzjyYX6TFD9L/view?usp=sharing
 
