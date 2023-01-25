@@ -7,7 +7,7 @@ package application;
  */
 
 public class Energy {
-    // instance variables
+    // Instance variables (encapsulation)
     private String strCountry;
     private String intYear;
     private double dblkWh;

@@ -96,6 +96,8 @@ public class DataExtract {
         // Variable instantiation
         Set<String> yearSet = new HashSet<String>();
         String country = "";
+
+        // File Input / Output course connection
         int fileColCounter = 0;
         File file = new File("C:/Users/brigh/github-classroom/SACHSTech/cpt-BrightonZhang1/src/energy.csv");
         FileReader fr = new FileReader(file);
