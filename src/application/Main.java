@@ -32,7 +32,7 @@ public class Main extends Application {
         DataExtract dataExtract = new DataExtract();
 
         // csvConvert() extracts csv data from the DataExtract class
-        dataExtract.csvConvert();
+        dataExtract.csvRead();
 
         // Hashmap and arraylist to store coutnry, year, and energy information
         HashMap<String, ArrayList<Energy>> countryEnergy = dataExtract.getcountryEnergy();
