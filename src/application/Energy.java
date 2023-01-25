@@ -25,14 +25,26 @@ public class Energy {
         dblkWh = kWh;
     }
 
+    /**
+     * Getter method for the strCountry variable
+     * @return strCountry
+     */
     public String getStrCountry() {
         return strCountry;
     }
 
+    /**
+     * Getter method for the intYear variable
+     * @return intYear
+     */
     public String getIntYear() {
         return intYear;
     }
 
+    /**
+     * Getter method for the dblkWh variable
+     * @return dblkWh
+     */
     public double getDblkWh() {
         return dblkWh;
     }
