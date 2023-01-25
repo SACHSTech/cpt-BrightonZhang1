@@ -1,6 +1,7 @@
 /* ....Show License.... */
 package charts;
  
+import application.DataExtract;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,7 +11,6 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.stage.Stage;
- 
  
 /**
  * A chart that displays rectangular bars with heights indicating data values
@@ -24,7 +24,7 @@ public class BarChartApp extends Application {
     private NumberAxis yAxis;
  
     public Parent createContent() {
-        String[] years = {"2007", "2008", "2009"};
+        String[] years = {"2007", "2008", "2009", "2010"};
         xAxis = new CategoryAxis();
         xAxis.setCategories(FXCollections.<String>observableArrayList(years));
         yAxis = new NumberAxis("Units Sold", 0.0d, 3000.0d, 1000.0d);
@@ -33,7 +33,8 @@ public class BarChartApp extends Application {
               new BarChart.Series("Apples", FXCollections.observableArrayList(
                 new BarChart.Data(years[0], 567d),
                 new BarChart.Data(years[1], 1292d),
-                new BarChart.Data(years[2], 1292d))),
+                new BarChart.Data(years[2], 1292d),
+                new BarChart.Data(years[3], 2000d))),
               new BarChart.Series("Lemons", FXCollections.observableArrayList(
                 new BarChart.Data(years[0], 956),
                 new BarChart.Data(years[1], 1665),
